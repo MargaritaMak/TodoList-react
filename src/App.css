@@ -1,11 +1,18 @@
 .App {
   text-align: center;
+  margin-top:  10%;
 }
 
 .App-logo {
   height: 40vmin;
   pointer-events: none;
 }
+
+
+.TodoList{
+   list-style-type: none;  
+}
+
 
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {

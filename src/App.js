@@ -1,25 +1,73 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { Component, useEffect, useState } from 'react';
+import Input from './components/Input';
+import Button from './components/Button';
+import ItemList from './container/ItemList';
 import './App.css';
+import DeleteModal from './container/DeleteModal';
+import Modal from './container/Modal'
 
 function App() {
+  const [itemList, setItemList] = useState([{id: 0, value: 'hello', isSelected: false}, {id: 1, value: 'hi',  isSelected: false}])
+  const [isDeleteModalShown, setIsDeleteModalShown] = useState(false);
+  const [itemsToDelete, setItemsToDelete] = useState([]);
+  const [isModalShown, setIsModalShown] = useState(false);
+  
+  const selectedItemsCount = itemList.filter(item=> item.isSelected).length;
+   
+  
+const handleDeleteClick = (ids) => {
+    debugger
+      const items = itemList.filter(item => !ids.includes(item.id));
+      setItemList(items)
+      setIsDeleteModalShown(false);
+    }
+    
+
+const handleItemCheck = (id) => {
+    const items = itemList.map(item => {
+      if(item.id == id) {
+         item.isSelected = !item.isSelected
+      }
+      return item;
+    })
+    setItemList(items)
+  }
+
+  const handleDeleteModalClose = () => {
+    setIsDeleteModalShown(false)
+  }
+
+
+const handleItemDelete = (id) => {
+  setItemsToDelete([id])
+  setIsDeleteModalShown(true);
+}
+
+const handleItemAdd = (value) => {
+  setItemList([...itemList, {id: itemList.length+1, value: value, isSelected: false}])
+  setIsModalShown(false)
+}
+
+const handleBulkDeleteClick = () => {
+  const itemIds = itemList.filter(item => item.isSelected).map(item => item.id)
+  setItemsToDelete(itemIds)
+  setIsDeleteModalShown(true)
+}
+
+
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+          {isDeleteModalShown ? <DeleteModal onDelete = {handleDeleteClick} itemsToDelete = {itemsToDelete}  onCloseModal = {handleDeleteModalClose} /> : null}
+          {isModalShown ? <Modal onAdd = {handleItemAdd}  onCloseModal = {()=> {setIsModalShown(false)}} /> : null}
+        <div>
+          <ItemList items = {itemList} onDeleteClick = {handleItemDelete} onItemCheck = {handleItemCheck} />
+           <Button value ='Add todo' onClick = {() => {setIsModalShown(true)}}/>
+           {selectedItemsCount> 1 ?
+           <Button value ='Bulk delete' onClick = {handleBulkDeleteClick}/> : null}
+        </div>
+      </div>
+
   );
 }
 
