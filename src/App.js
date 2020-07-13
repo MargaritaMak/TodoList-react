@@ -1,10 +1,9 @@
-import React, { Component, useEffect, useState } from 'react';
-import Input from './components/Input';
+import React, { useState } from 'react';
 import Button from './components/Button';
-import ItemList from './container/ItemList';
+import ItemList from './containers/ItemList';
 import './App.css';
-import DeleteModal from './container/DeleteModal';
-import Modal from './container/Modal'
+import DeleteModal from './containers/DeleteModal';
+import Modal from './containers/Modal'
 
 function App() {
   const [itemList, setItemList] = useState([{id: 0, value: 'hello', isSelected: false}, {id: 1, value: 'hi',  isSelected: false}])
@@ -33,9 +32,9 @@ const handleItemCheck = (id) => {
     setItemList(items)
   }
 
-  const handleDeleteModalClose = () => {
+const handleDeleteModalClose = () => {
     setIsDeleteModalShown(false)
-  }
+}
 
 
 const handleItemDelete = (id) => {
